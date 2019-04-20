@@ -5,9 +5,11 @@ import datetime
 app = Flask(__name__)
 #!/usr/bin/env python3
 
+# imports for Canvas API
 import servicesKeys
 import urllib as ul
 from urllib.error import HTTPError as hpe
+# General imports used for multiple sections
 import json
 import os, sys, time
 import requests
