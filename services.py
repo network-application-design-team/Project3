@@ -1,10 +1,11 @@
-from six.moves import input  
+from six.moves import input
 from zeroconf import ServiceBrowser, Zeroconf
 from flask import Flask, request, render_template, Response
 from functools import wraps
 import datetime
 import socket
 import time
+
 app = Flask(__name__)
 #!/usr/bin/env python3
 
@@ -12,13 +13,14 @@ app = Flask(__name__)
 import servicesKeys
 import urllib as ul
 from urllib.error import HTTPError as hpe
+
 # General imports used for multiple sections
 import json
 import os, sys, time
 import requests
 
 
-''' 
+""" 
 # Access token and API URL
 parent_dir = '/home/pi/projects/Project3/'
 web = 'https://vt.instructure.com/api/v1/courses/'
@@ -55,45 +57,50 @@ try:
 
 except hpe as fileE:
     print('Error: No files with the given id')
-'''
+"""
 
 
-class MyListener(object):  
-    #def remove_service(self, zeroconf, type, name):
-      #  print("Service %s removed" % (name,))
+class MyListener(object):
+    # def remove_service(self, zeroconf, type, name):
+    #  print("Service %s removed" % (name,))
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
         # print name, info.get_name(), info.server,
-#        print name, info
-#@        print("no")
-        if info.name == 'team20_led._http._tcp.local.':
+        #        print name, info
+        # @        print("no")
+        if info.name == "team20_led._http._tcp.local.":
             global ledAddress
-#            print("yes")
+            #            print("yes")
             ledAddress = socket.inet_ntoa(info.address)
-            print('ip address ', ledAddress)
+            print("ip address ", ledAddress)
 
 
-#zeroconf = Zeroconf()  
-#listener = MyListener()  
-#browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener) 
-#try:  
+# zeroconf = Zeroconf()
+# listener = MyListener()
+# browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
+# try:
 #    input("Press enter to exit...\n\n")
-#finally:  
+# finally:
 #    zeroconf.close()
+
 
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    return username == "admin" and password == "secret"
+
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
-    'Could not verify your access level for that URL.\n'
-    'You have to login with proper credentials', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        "Could not verify your access level for that URL.\n"
+        "You have to login with proper credentials",
+        401,
+        {"WWW-Authenticate": 'Basic realm="Login Required"'},
+    )
+
 
 def requires_auth(f):
     @wraps(f)
@@ -102,6 +109,7 @@ def requires_auth(f):
         if not auth or not check_auth(auth.username, auth.password):
             return authenticate()
         return f(*args, **kwargs)
+
     return decorated
 
 
@@ -109,29 +117,31 @@ color = "Red"
 dimness = 50
 
 
-@app.route("/")
+@app.route("/", methods=["POST", "PUT", "GET"])
 @requires_auth
-def hello():
-   now = datetime.datetime.now()
-   timeString = now.strftime("%Y-%m-%d %H:%M")
-   templateData = {
-      'title' : 'HELLO!',
-      'time': timeString,
-      'color': color,
-      'dimness': str(dimness)
-      }
-   return render_template('main.html', **templateData)
+def update():
+    if request.method == "GET":
+        now = datetime.datetime.now()
+        timeString = now.strftime("%Y-%m-%d %H:%M")
+        templateData = {
+            "title": "HELLO!",
+            "time": timeString,
+            "color": color,
+            "dimness": str(dimness),
+        }
+        return render_template("main.html", **templateData)
+
 
 if __name__ == "__main__":
-#   app.run(host='0.0.0.0', port=80, debug=True)
-   zeroconf = Zeroconf()
-   listener = MyListener()
-   browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
-   time.sleep(1)
-   #zeroconf.close()
-   app.run(host='0.0.0.0', port=80, debug=True)
-   #print("fff")
-   try:  
-    print()
-   finally:  
-    zeroconf.close()
+    #   app.run(host='0.0.0.0', port=80, debug=True)
+    zeroconf = Zeroconf()
+    listener = MyListener()
+    browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
+    time.sleep(1)
+    # zeroconf.close()
+    app.run(host="0.0.0.0", port=80, debug=True)
+    # print("fff")
+    try:
+        print()
+    finally:
+        zeroconf.close()
