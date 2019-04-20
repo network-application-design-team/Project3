@@ -105,7 +105,8 @@ def requires_auth(f):
     return decorated
 
 
-
+color = "Red"
+dimness = 50
 
 
 @app.route("/")
@@ -115,7 +116,9 @@ def hello():
    timeString = now.strftime("%Y-%m-%d %H:%M")
    templateData = {
       'title' : 'HELLO!',
-      'time': timeString
+      'time': timeString,
+      'color': color,
+      'dimness': str(dimness)
       }
    return render_template('main.html', **templateData)
 
