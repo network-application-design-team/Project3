@@ -129,19 +129,31 @@ def hello():
             "time": timeString,
             "color": color,
             "dimness": str(dimness),
+            "led": status
         }
         return render_template("main.html", **templateData)
 
 
 @app.route(
     "/LED?status=<requestStat>&color=<requestColor>&intensity=<requestIntensity>",
-    methods=["POST", "PUT"],
+    methods=["POST", "PUT", "GET"],
 )
 def updateLED(requestStat, requestColor, requestIntensity):
-    if request.method == "POST" or request.method == "PUT":
+    if request.method == "POST" or request.method == "PUT" or request.method == "GET":
+#        print("yes")
         color = requestColor
         dimness = requestIntensity
         status = requestStatus
+        now = datetime.datetime.now()
+        timeString = now.strftime("%Y-%m-%d %H:%M")
+        templateData = {
+            "title": "HELLO!",
+            "time": timeString,
+            "color": color,
+            "dimness": str(dimness),
+            "led": status
+        }
+        return render_template("main.html", **templateData)
 
 
 if __name__ == "__main__":
