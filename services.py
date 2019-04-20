@@ -1,11 +1,11 @@
 from six.moves import input
 from zeroconf import ServiceBrowser, Zeroconf
-from flask import Flask, request, render_template, Response
+from flask import Flask, request, render_template, Response, url_for
 from functools import wraps
 import datetime
 import socket
 import time
-
+import pdb
 app = Flask(__name__)
 #!/usr/bin/env python3
 
@@ -113,55 +113,104 @@ def requires_auth(f):
     return decorated
 
 
-color = "Red"
-dimness = 50
-status = "on"
+#color = "Red"
+#dimness = 50
+#status = "on"
+
+
+
+templateData = {
+    "title": "HELLO!",
+    "time": '',
+    "color": 'white',
+    "dimness": '0',
+    "led": 'off'
+}
+
+
 
 
 @app.route("/", methods=["GET"])
 @requires_auth
 def hello():
     if request.method == "GET":
+        #print(command)
+#        pdb.set_trace()
         now = datetime.datetime.now()
         timeString = now.strftime("%Y-%m-%d %H:%M")
-        templateData = {
-            "title": "HELLO!",
-            "time": timeString,
-            "color": color,
-            "dimness": str(dimness),
-            "led": status
-        }
+        #templateData = {
+         #   "title": "HELLO!",
+          #  "time": timeString,
+           # "color": color,
+           # "dimness": str(dimness),
+           # "led": status
+        #}
+        templateData["time"] = timeString
+#        templateData["color"] = "white"
+  #      templateData["dimness"] = "0"
+   #     templateData["led"] = "off"
+        return render_template("main.html", **templateData)
+#        js = json.dumps(templateData)
+
+ #       resp = Response(js, status=200, mimetype='application/json')
+  #      resp.headers['Link'] = 'something'
+   #     return resp
+
+
+@app.route("/LED", methods=["GET"])
+@requires_auth
+def handle_led():
+    if request.method == "GET":
+ #       pdb.set_trace()
+     #   print(request.args)
+        argList = request.args
+        status = argList.get('status')
+        color = argList.get('color')
+        dimness = int(argList.get('intensity'))
+        now = datetime.datetime.now()
+        timeString = now.strftime("%Y-%m-%d %H:%M")
+        templateData["time"] = timeString
+        templateData["color"] = color
+        templateData["dimness"] = str(dimness)
+        templateData["led"] = status
+
+        #templateData = {
+         #   "title": "HELLO!",
+          #  "time": timeString,
+           # "color": color,
+           # "dimness": str(dimness),
+           # "led": status
+        #}
+        return render_template("main.html", **templateData)
+       # js = json.dumps(templateData)
+
+        #resp = Response(js, status=200, mimetype='application/json')
+        #resp.headers['Link'] = 'something'
+
+        #return resp
+
+
+
+@app.route("/Canvas", methods=["GET"])
+@requires_auth
+def handle_canvas():
+    if request.method == "GET":
+        argList = request.args
+        filename = argList.get('file')
         return render_template("main.html", **templateData)
 
 
-@app.route(
-    "/LED?status=<requestStat>&color=<requestColor>&intensity=<requestIntensity>",
-    methods=["POST", "PUT", "GET"],
-)
-def updateLED(requestStat, requestColor, requestIntensity):
-    if request.method == "POST" or request.method == "PUT" or request.method == "GET":
-#        print("yes")
-        color = requestColor
-        dimness = requestIntensity
-        status = requestStatus
-        now = datetime.datetime.now()
-        timeString = now.strftime("%Y-%m-%d %H:%M")
-        templateData = {
-            "title": "HELLO!",
-            "time": timeString,
-            "color": color,
-            "dimness": str(dimness),
-            "led": status
-        }
-        return render_template("main.html", **templateData)
+
 
 
 if __name__ == "__main__":
     #   app.run(host='0.0.0.0', port=80, debug=True)
+    
     zeroconf = Zeroconf()
     listener = MyListener()
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
     time.sleep(1)
+    
     # zeroconf.close()
     app.run(host="0.0.0.0", port=80, debug=True)
     # print("fff")
