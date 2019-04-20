@@ -115,11 +115,12 @@ def requires_auth(f):
 
 color = "Red"
 dimness = 50
+status = "on"
 
 
-@app.route("/", methods=["POST", "PUT", "GET"])
+@app.route("/", methods=["GET"])
 @requires_auth
-def update():
+def hello():
     if request.method == "GET":
         now = datetime.datetime.now()
         timeString = now.strftime("%Y-%m-%d %H:%M")
@@ -130,6 +131,17 @@ def update():
             "dimness": str(dimness),
         }
         return render_template("main.html", **templateData)
+
+
+@app.route(
+    "/LED?status=<requestStat>&color=<requestColor>&intensity=<requestIntensity>",
+    methods=["POST", "PUT"],
+)
+def updateLED(requestStat, requestColor, requestIntensity):
+    if request.method == "POST" or request.method == "PUT":
+        color = requestColor
+        dimness = requestIntensity
+        status = requestStatus
 
 
 if __name__ == "__main__":
