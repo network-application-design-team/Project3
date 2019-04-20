@@ -7,8 +7,8 @@ def fetch_ip():
 
 
 class MyListener:
-    def remove_service(self, zeroconf, type, name):
-        print("Service %s removed" % (name,))
+#    def remove_service(self, zeroconf, type, name):
+ #       print("Service %s removed" % (name,))
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
         print("Service %s added, service info: %s" % (name, info))
