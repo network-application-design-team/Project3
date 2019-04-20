@@ -50,7 +50,6 @@ except hpe as fileE:
     print('Error: No files with the given id')
 
 
-
 class MyListener(object):  
     def remove_service(self, zeroconf, type, name):
         print("Service %s removed" % (name,))
