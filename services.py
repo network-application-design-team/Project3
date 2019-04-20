@@ -18,7 +18,7 @@ import os, sys, time
 import requests
 
 
-'''
+''' 
 # Access token and API URL
 parent_dir = '/home/pi/projects/Project3/'
 web = 'https://vt.instructure.com/api/v1/courses/'
@@ -55,8 +55,8 @@ try:
 
 except hpe as fileE:
     print('Error: No files with the given id')
-
 '''
+
 
 class MyListener(object):  
     #def remove_service(self, zeroconf, type, name):
