@@ -122,13 +122,11 @@ def turnOff(pin):
 
 
 def redOn():
-    blink(redPin)
-    bright(pwmRed, dc)
+    blink(redPin, dc)
 
 
 def greenOn():
-    blink(greenPin)
-    bright(pwmGreen, dc)
+    blink(greenPin, dc)
 
 
 def blueOn():
