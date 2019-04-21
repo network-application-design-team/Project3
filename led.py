@@ -71,11 +71,12 @@ greenPin = 13
 bluePin = 15
 
 """PWM functions"""
-GPIO.setmode(GPIO.BOARD)
-pwmRed = GPIO.PWM(11, 100)
-pwmGreen = GPIO.PWM(13, 100)
-pwmBlue = GPIO.PWM(15, 100)
+#GPIO.setmode(GPIO.BOARD)
+#pwmRed = GPIO.PWM(11, 100)
+#pwmGreen = GPIO.PWM(13, 100)
+#pwmBlue = GPIO.PWM(15, 100)
 dc = 100
+pwm
 # dcRed = 100
 # dcGreen = 100
 # dcBlue = 100
@@ -86,22 +87,29 @@ GPIO.setwarnings(False)
 """LED Functions"""
 
 
-def blink(pin):
+def blink(pin, newdc):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.HIGH)
-
+    pwm = GPIO.PWM(pin, 100)
+    pwm.start(100)
+    pwm.ChangeDutyCycle(newdc)
 
 def turnOff(pin):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
+    pwm.stop()
 
 
 """PWM lightups"""
 
-
-def bright(pwm, newdc):
+"""
+def bright(pin, newdc):
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output
+    pwm = GPIO.PWM(pin, 100) 
     pwm.start(100)
     pwm.ChangeDutyCycle(newdc)
 
@@ -109,7 +117,7 @@ def bright(pwm, newdc):
 def dark(pwm):
     pwm.ChangeDutyCycle(0)
     pwm.stop()
-
+"""
 
 """LED and PWM lightups"""
 
@@ -125,80 +133,58 @@ def greenOn():
 
 
 def blueOn():
-    blink(bluePin)
-    bright(pwmBlue, dc)
+    blink(bluePin, dc)
 
 
 def yellowOn():
-    blink(redPin)
-    bright(pwmRed, dc)
-    blink(greenPin)
-    bright(pwmGreen, dc)
+    blink(redPin, dc)
+    blink(greenPin, dc)
 
 
 def cyanOn():
-    blink(greenPin)
-    bright(pwmGreen, dc)
-    blink(bluePin)
-    bright(pwmBlue, dc)
+    blink(greenPin, dc)
+    blink(bluePin, dc)
 
 
 def magentaOn():
-    blink(redPin)
-    bright(pwmRed, dc)
-    blink(bluePin)
-    bright(pwmBlue, dc)
+    blink(redPin, dc)
+    blink(bluePin, dc)
 
 
 def whiteOn():
-    blink(redPin)
-    bright(pwmRed, dc)
-    blink(greenPin)
-    bright(pwmGreen, dc)
-    blink(bluePin)
-    bright(pwmBlue, dc)
+    blink(redPin, dc)
+    blink(greenPin, dc)
+    blink(bluePin, dc)
 
 
 def redOff():
     turnOff(redPin)
-    dark(pwmRed)
 
 
 def greenOff():
     turnOff(greenPin)
-    dark(pwmGreen)
 
 
 def blueOff():
     turnOff(bluePin)
-    dark(pwmBlue)
 
 
 def yellowOff():
     turnOff(redPin)
-    dark(pwmRed)
     turnOff(greenPin)
-    dark(pwmGreen)
 
 
 def cyanOff():
     turnOff(greenPin)
-    dark(pwmGreen)
     turnOff(bluePin)
-    dark(pwmBlue)
 
 
 def magentaOff():
     turnOff(redPin)
-    dark(pwmRed)
     turnOff(bluePin)
-    dark(pwmBlue)
 
 
 def whiteOff():
     turnOff(redPin)
-    dark(pwmRed)
     turnOff(greenPin)
-    dark(pwmGreen)
     turnOff(bluePin)
-    dark(pwmBlue)
