@@ -187,3 +187,45 @@ def whiteOff():
     turnOff(redPin)
     turnOff(greenPin)
     turnOff(bluePin)
+
+
+status = 'on'
+color = 'blue'
+intensity = '50'
+
+if status == 'on':
+    if color == 'red':
+        redOn()
+    elif color == 'green':
+        greenOn()
+    elif color == 'blue':
+        blueOn()
+    elif color == 'yellow':
+        yellowOn()
+    elif color == 'cyan':
+        cyanOn()
+    elif color == 'magenta':
+        magentaOn()
+    elif color == 'white':
+        whiteOn()
+    else:
+        print('ERROR: Unknown Color Request')
+elif status == 'off':
+    if color == 'red':
+        redOff()
+    elif color == 'green':
+        greenOff()
+    elif color == 'blue':
+        blueOff()
+    elif color == 'yellow':
+        yellowOff()
+    elif color == 'cyan':
+        cyanOff()
+    elif color == 'magenta':
+        magentaOff()
+    elif color == 'white':
+        whiteOff()
+    else:
+        print('ERROR: Unknown Color Request')
+else:
+    print('ERROR: Unknown Status Request')
