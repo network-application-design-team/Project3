@@ -22,9 +22,10 @@ import os, sys, time
 import requests
 
 
-""" 
+ 
 # Access token and API URL
-parent_dir = '/home/pi/projects/Project3/'
+parent_dir = os.getcwd()
+#parent_dir = '/home/pi/projects/Project3/'
 web = 'https://vt.instructure.com/api/v1/courses/'
 ckey = servicesKeys.ckey
 course = '83639'
@@ -59,7 +60,7 @@ try:
 
 except hpe as fileE:
     print('Error: No files with the given id')
-"""
+
 
 
 class MyListener(object):
