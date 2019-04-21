@@ -1,5 +1,5 @@
 from six.moves import input
-from zeroconf import ServiceBrowser, Zeroconf
+from zeroconf import ServiceBrowser, Zeroconf, ServiceInfo
 from flask import Flask, request, render_template, Response, url_for
 from functools import wraps
 import datetime
@@ -75,7 +75,7 @@ class MyListener(object):
             global ledAddress
             #            print("yes")
             ledAddress = socket.inet_ntoa(info.address)
-            print("ip address ", ledAddress)
+#            print("ip address ", ledAddress)
 
 
 # zeroconf = Zeroconf()
@@ -130,6 +130,8 @@ templateData = {
     "dimness": "0",
     "led": "off",
 }
+
+
 
 
 @app.route("/", methods=["GET"])
@@ -203,6 +205,7 @@ def handle_canvas():
         return render_template("main.html", **templateData)
 
 
+
 # Pymongo
 client = pymongo.MongoClient(
     host="localhost",
@@ -217,16 +220,36 @@ col = db.service_auth
 if __name__ == "__main__":
     #   app.run(host='0.0.0.0', port=80, debug=True)
 
+def fetch_ip():
+      return((([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close())\
+        for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0])
+
+
+
+
+if __name__ == "__main__":
+    #   app.run(host='0.0.0.0', port=80, debug=True)
+    ledColors = {"red", "blue", "green", "magenta", "cyan", "yellow", "white"}
+    ipAddr = fetch_ip()
+
     zeroconf = Zeroconf()
+  #  service = ServiceInfo("_http._tcp.local.", "service20._http._tcp.local.",
+ #socket.inet_aton(fetch_ip()), 5000, 0, 0, ledColors, "service20.local.")
+ #   zeroconf.register_service(service)
+
     listener = MyListener()
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
     time.sleep(1)
+
 
     user1 = {"user": "Kishan", "Pass": "Something", "Delete": "True"}
     user2 = {"user": "Buse", "Pass": "Honaker", "Delete": "True"}
     user3 = {"user": "Ethan", "Pass": "Password", "Delete": "True"}
     posts = [user1, user2, user3]
     col.insert_many(posts)
+
+#    zeroconf.register_service(service)
+
     # zeroconf.close()
     app.run(host="0.0.0.0", port=80, debug=True)
     # print("fff")
