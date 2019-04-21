@@ -24,7 +24,7 @@ import requests
 
  
 """Access token and API URL"""
-parent_dir = os.getcwd()
+parent_dir = os.getcwd()+'/'
 #parent_dir = '/home/pi/projects/Project3/'
 web = 'https://vt.instructure.com/api/v1/courses/'
 ckey = servicesKeys.ckey
