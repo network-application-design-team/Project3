@@ -72,6 +72,7 @@ greenPin = 13
 bluePin = 15
 
 """PWM functions"""
+GPIO.setMode(GPIO.BOARD)
 pwmRed = GPIO.PWM(11, 100)
 pwmGreen = GPIO.PWM(13, 100)
 pwmBlue = GPIO.PWM(15, 100)
