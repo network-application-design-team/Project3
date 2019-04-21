@@ -104,20 +104,19 @@ def turnOff(pin):
 
 """PWM lightups"""
 
-"""
-def bright(pin, newdc):
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output
-    pwm = GPIO.PWM(pin, 100) 
-    pwm.start(100)
-    pwm.ChangeDutyCycle(newdc)
+#def bright(pin, newdc):
+#    GPIO.setmode(GPIO.BOARD)
+#    GPIO.setup(pin, GPIO.OUT)
+#    GPIO.output
+#    pwm = GPIO.PWM(pin, 100) 
+#    pwm.start(100)
+#    pwm.ChangeDutyCycle(newdc)
 
 
-def dark(pwm):
-    pwm.ChangeDutyCycle(0)
-    pwm.stop()
-"""
+#def dark(pwm):
+#    pwm.ChangeDutyCycle(0)
+#    pwm.stop()
+
 
 """LED and PWM lightups"""
 
