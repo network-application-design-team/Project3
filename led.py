@@ -65,7 +65,6 @@ if __name__ == "__main__":
         #   r = requests.get(ipNum, auth=HTTPBasicAuth("admin", "secret"))
         print("yes")
         break
-
 """Set led ports"""
 redPin = 11
 greenPin = 13
