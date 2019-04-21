@@ -48,22 +48,24 @@ class MyListener(object):
         # print name, info.get_name(), info.server,
         if info.name == "team20_service._http._tcp.local.":
             self.name = socket.inet_ntoa(info.address)
-            print(self.name)
+        #    print(self.name)
 
 
 if __name__ == "__main__":
     zeroconf = Zeroconf()
     listener = MyListener()
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
-    time.sleep(5)
+    time.sleep(1)
 
-    print(listener.name)
+   # print(listener.name)
+    url = "http://" + listener.name
+    print(url)
     while 1:
         # print(globalAddress)
         #    url = "http://" + str(globalAddress)
         # print(url)
         #   r = requests.get(ipNum, auth=HTTPBasicAuth("admin", "secret"))
-        print("yes")
+       # print("yes")
         break
 """Set led ports"""
 redPin = 11
