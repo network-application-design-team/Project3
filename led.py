@@ -152,8 +152,18 @@ if __name__ == "__main__":
         #    url = "http://" + str(globalAddress)
         # print(url)
         time.sleep(10)
+
         r = requests.get(url, auth=HTTPBasicAuth("Buse", "Honaker"))
             
+
+
+        if oldColor != color or oldLed != status or oldDim != intensity:
+            print("color: " + color)
+            print("status: " + status)
+            print("intensity: " + intensity)
+            oldColor = color
+            oldLed = status
+            oldDim = intensity 
         data = r.text
 #        print(data)
  
@@ -169,6 +179,7 @@ if __name__ == "__main__":
         color = colorTag[len(c):-len(l)]
         status = ledTag[len(x):-len(l)]
         intensity = int(dimTag[len(y):-len(l)])
+        
         if status == 'on':
             if color == 'red':
                 dc = 0
