@@ -5,7 +5,6 @@ from functools import wraps
 import datetime
 import socket
 import time
-import pdb
 import pymongo
 
 app = Flask(__name__)
@@ -35,7 +34,7 @@ def canvasRun(can_file):
     payload = {"access_token": ckey, "search_term": can_file}
     r = requests.get(web + course + "/files", params=payload)
     # url = web+course+'/files?search_term='+can_file+'&access_token='+ckey
-    
+
     try:
         """Fetch the course details"""
         can_file = ul.request.urlopen(r.url).read()
@@ -65,9 +64,10 @@ def canvasRun(can_file):
 class MyListener(object):
     # def remove_service(self, zeroconf, type, name):
     #  print("Service %s removed" % (name,))
-    
+
     def __init__(self):
         self.connected = False
+
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
         # print name, info.get_name(), info.server,
@@ -183,7 +183,7 @@ def hello():
 @requires_auth
 def handle_led():
     if request.method == "GET":
-        #pdb.set_trace()
+        # pdb.set_trace()
         #   print(request.args)
         if connected:
             argList = request.args

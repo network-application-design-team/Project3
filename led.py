@@ -5,13 +5,16 @@ import requests
 import time
 import json
 from zeroconf import ServiceBrowser, Zeroconf
-from html.parser import HTMLParser 
-import pdb
+from html.parser import HTMLParser
+
 """imports for gpio led usage"""
 import sys, time
 import RPi.GPIO as GPIO
 from bs4 import BeautifulSoup
+
 GPIO.setwarnings(False)
+
+
 def fetch_ip():
     return (
         (
@@ -51,9 +54,10 @@ class MyListener(object):
             self.name = socket.inet_ntoa(info.address)
         #    print(self.name)
 
-status = ''
-color = ''
-brightness = ''
+
+status = ""
+color = ""
+brightness = ""
 
 redPin = 11
 greenPin = 13
@@ -73,16 +77,17 @@ pwmBlue = GPIO.PWM(bluePin, 100)
 pwmBlue.start(0)
 
 
-
 def blink(pin, pwm, newdc):
     pwm.ChangeDutyCycle(newdc)
 
-#def turnOff(pin, pwm, newdc):
+
+# def turnOff(pin, pwm, newdc):
 #    GPIO.setmode(GPIO.BOARD)
 #    GPIO.setup(pin, GPIO.OUT)
 #    GPIO.output(pin, GPIO.LOW)
 
 """LED and PWM lightups"""
+
 
 def red(dc):
     blink(redPin, pwmRed, dc)
@@ -117,28 +122,13 @@ def white(dc):
     blink(bluePin, pwmBlue, dc)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     zeroconf = Zeroconf()
     listener = MyListener()
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
     time.sleep(1)
     parser = HTMLParser()
-   # print(listener.name)
+    # print(listener.name)
     url = "http://" + listener.name
     oldColor = "white"
     oldLed = "off"
@@ -146,7 +136,7 @@ if __name__ == "__main__":
     color = "white"
     status = "off"
     intensity = 0
-#    print(url)
+    #    print(url)
     while 1:
         # print(globalAddress)
         #    url = "http://" + str(globalAddress)
@@ -154,8 +144,6 @@ if __name__ == "__main__":
         time.sleep(10)
 
         r = requests.get(url, auth=HTTPBasicAuth("Buse", "Honaker"))
-            
-
 
         if oldColor != color or oldLed != status or oldDim != intensity:
             print("color: " + color)
@@ -163,11 +151,11 @@ if __name__ == "__main__":
             print("intensity: " + str(intensity))
             oldColor = color
             oldLed = status
-            oldDim = intensity 
+            oldDim = intensity
         data = r.text
-#        print(data)
- 
-        soup = BeautifulSoup(r.text, 'html.parser')
+        #        print(data)
+
+        soup = BeautifulSoup(r.text, "html.parser")
         listSoup = soup.find_all("h2")
         colorTag = str(listSoup[1])
         ledTag = str(listSoup[2])
@@ -176,93 +164,85 @@ if __name__ == "__main__":
         l = " </h2>"
         x = "<h2>LED : "
         y = "<h2>Dimness : "
-        color = colorTag[len(c):-len(l)]
-        status = ledTag[len(x):-len(l)]
-        intensity = int(dimTag[len(y):-len(l)])
-        
-        if status == 'on':
-            if color == 'red':
+        color = colorTag[len(c) : -len(l)]
+        status = ledTag[len(x) : -len(l)]
+        intensity = int(dimTag[len(y) : -len(l)])
+
+        if status == "on":
+            if color == "red":
                 dc = 0
                 blue(dc)
                 green(dc)
                 dc = intensity
                 red(dc)
-            elif color == 'green':
+            elif color == "green":
                 dc = 0
                 red(dc)
                 blue(dc)
                 dc = intensity
                 green(dc)
-            elif color == 'blue':
+            elif color == "blue":
                 dc = 0
                 red(dc)
                 green(dc)
                 dc = intensity
                 blue(dc)
-            elif color == 'yellow':
+            elif color == "yellow":
                 dc = 0
                 blue(dc)
                 dc = intensity
                 yellow(dc)
-            elif color == 'cyan':
+            elif color == "cyan":
                 dc = 0
                 red(dc)
                 dc = intensity
                 cyan(dc)
-            elif color == 'magenta':
+            elif color == "magenta":
                 dc = 0
                 green(dc)
                 dc = intensity
                 magenta(dc)
-            elif color == 'white':
+            elif color == "white":
                 dc = intensity
                 white(dc)
             else:
-                print('ERROR: Unknown Color Request')
-        elif status == 'off':
-            if color == 'red':
+                print("ERROR: Unknown Color Request")
+        elif status == "off":
+            if color == "red":
                 dc = 0
                 red(dc)
-            elif color == 'green':
+            elif color == "green":
                 dc = 0
                 green(dc)
-            elif color == 'blue':
+            elif color == "blue":
                 dc = 0
                 blue(dc)
-            elif color == 'yellow':
+            elif color == "yellow":
                 dc = 0
                 yellow(dc)
-            elif color == 'cyan':
+            elif color == "cyan":
                 dc = 0
                 cyan(dc)
-            elif color == 'magenta':
+            elif color == "magenta":
                 dc = 0
                 magenta(dc)
-            elif color == 'white':
+            elif color == "white":
                 dc = 0
                 white(dc)
             else:
-                print('ERROR: Unknown Color Request')
+                print("ERROR: Unknown Color Request")
         else:
-            print('ERROR: Unknown Status Request')
+            print("ERROR: Unknown Status Request")
 
-
-
-
-
-
-
-
-
-      #  print(soup.prettify())
+    #  print(soup.prettify())
 #        pdb.set_trace()
-       # parsedData = parser.feed(data)
-       # print(parser.)
-       # print(r.text)
-        #status = r.text
-        # print("yes")
-        #print(status)
-        
+# parsedData = parser.feed(data)
+# print(parser.)
+# print(r.text)
+# status = r.text
+# print("yes")
+# print(status)
+
 """Set led ports"""
 redPin = 11
 greenPin = 13
@@ -271,8 +251,7 @@ bluePin = 15
 """PWM functions"""
 
 dc = 100
-pwm = ''
-
+pwm = ""
 
 
 """turn off warnings"""
@@ -284,7 +263,9 @@ GPIO.setwarnings(False)
 def blink(pin, pwm, newdc):
     pwm.ChangeDutyCycle(newdc)
 
+
 """LED and PWM lightups"""
+
 
 def red(dc):
     blink(redPin, pwmRed, dc)
