@@ -140,13 +140,22 @@ if __name__ == "__main__":
     parser = HTMLParser()
    # print(listener.name)
     url = "http://" + listener.name
-    
+    oldColor = "white"
+    oldLed = "off"
+    oldDim = 0
+    color = "white"
+    status = "off"
+    intensity = 0
 #    print(url)
     while 1:
         # print(globalAddress)
         #    url = "http://" + str(globalAddress)
         # print(url)
-        r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
+        if oldColor != color or oldLed != status or oldDim != intensity:
+            r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
+            oldColor = color
+            oldLed = status
+            oldDim = intensity
         data = r.text
 #        print(data)
  
