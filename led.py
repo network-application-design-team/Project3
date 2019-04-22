@@ -160,7 +160,7 @@ if __name__ == "__main__":
         if oldColor != color or oldLed != status or oldDim != intensity:
             print("color: " + color)
             print("status: " + status)
-            print("intensity: " + intensity)
+            print("intensity: " + str(intensity))
             oldColor = color
             oldLed = status
             oldDim = intensity 
