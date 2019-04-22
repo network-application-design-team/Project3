@@ -212,7 +212,7 @@ def white(dc):
 
 status = 'on'
 color = 'blue'
-intensity = '50'
+intensity = 50
 
 if status == 'on':
     if color == 'red':
