@@ -171,21 +171,36 @@ if __name__ == "__main__":
         intensity = int(dimTag[len(y):-len(l)])
         if status == 'on':
             if color == 'red':
+                dc = 0
+                blue(dc)
+                green(dc)
                 dc = intensity
                 red(dc)
             elif color == 'green':
+                dc = 0
+                red(dc)
+                blue(dc)
                 dc = intensity
                 green(dc)
             elif color == 'blue':
+                dc = 0
+                red(dc)
+                green(dc)
                 dc = intensity
                 blue(dc)
             elif color == 'yellow':
+                dc = 0
+                blue(dc)
                 dc = intensity
                 yellow(dc)
             elif color == 'cyan':
+                dc = 0
+                red(dc)
                 dc = intensity
                 cyan(dc)
             elif color == 'magenta':
+                dc = 0
+                green(dc)
                 dc = intensity
                 magenta(dc)
             elif color == 'white':
@@ -244,15 +259,8 @@ bluePin = 15
 
 """PWM functions"""
 
-#GPIO.setmode(GPIO.BOARD)
-#pwmRed = GPIO.PWM(11, 100)
-#pwmGreen = GPIO.PWM(13, 100)
-#pwmBlue = GPIO.PWM(15, 100)
 dc = 100
 pwm = ''
-# dcRed = 100
-# dcGreen = 100
-# dcBlue = 100
 
 
 
@@ -264,11 +272,6 @@ GPIO.setwarnings(False)
 
 def blink(pin, pwm, newdc):
     pwm.ChangeDutyCycle(newdc)
-
-#def turnOff(pin, pwm, newdc):
-#    GPIO.setmode(GPIO.BOARD)
-#    GPIO.setup(pin, GPIO.OUT)
-#    GPIO.output(pin, GPIO.LOW)
 
 """LED and PWM lightups"""
 
@@ -303,92 +306,3 @@ def white(dc):
     blink(redPin, pwmRed, dc)
     blink(greenPin, pwmGreen, dc)
     blink(bluePin, pwmBlue, dc)
-
-
-#def redOff():
-#    turnOff(redPin)
-
-
-#def greenOff():
-#    turnOff(greenPin)
-
-
-#def blueOff():
-#    turnOff(bluePin)
-
-
-#def yellowOff():
-#    turnOff(redPin)
-#    turnOff(greenPin)
-
-
-#def cyanOff():
-#    turnOff(greenPin)
-#    turnOff(bluePin)
-
-
-#def magentaOff():
-#    turnOff(redPin)
-#    turnOff(bluePin)
-
-
-#def whiteOff():
-#    turnOff(redPin)
-#    turnOff(greenPin)
-#    turnOff(bluePin)
-
-
-status = 'on'
-color = 'blue'
-intensity = 50
-
-if status == 'on':
-    if color == 'red':
-        dc = intensity
-        red(dc)
-    elif color == 'green':
-        dc = intensity
-        green(dc)
-    elif color == 'blue':
-        dc = intensity
-        blue(dc)
-    elif color == 'yellow':
-        dc = intensity
-        yellow(dc)
-    elif color == 'cyan':
-        dc = intensity
-        cyan(dc)
-    elif color == 'magenta':
-        dc = intensity
-        magenta(dc)
-    elif color == 'white':
-        dc = intensity
-        white(dc)
-    else:
-        print('ERROR: Unknown Color Request')
-elif status == 'off':
-    if color == 'red':
-        dc = 0
-        red(dc)
-    elif color == 'green':
-        dc = 0
-        green(dc)
-    elif color == 'blue':
-        dc = 0
-        blue(dc)
-    elif color == 'yellow':
-        dc = 0
-        yellow(dc)
-    elif color == 'cyan':
-        dc = 0
-        cyan(dc)
-    elif color == 'magenta':
-        dc = 0
-        magenta(dc)
-    elif color == 'white':
-        dc = 0
-        white(dc)
-    else:
-        print('ERROR: Unknown Color Request')
-else:
-    print('ERROR: Unknown Status Request')
