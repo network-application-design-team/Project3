@@ -3,13 +3,14 @@ from requests.auth import HTTPBasicAuth
 import socket
 import requests
 import time
-
+import json
 from zeroconf import ServiceBrowser, Zeroconf
-
+from html.parser import HTMLParser 
+import pdb
 """imports for gpio led usage"""
 import sys, time
 import RPi.GPIO as GPIO
-
+from bs4 import BeautifulSoup
 
 def fetch_ip():
     return (
@@ -50,22 +51,52 @@ class MyListener(object):
             self.name = socket.inet_ntoa(info.address)
         #    print(self.name)
 
+status = ''
+color = ''
+brightness = ''
+
 
 if __name__ == "__main__":
     zeroconf = Zeroconf()
     listener = MyListener()
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
     time.sleep(1)
-
+    parser = HTMLParser()
    # print(listener.name)
     url = "http://" + listener.name
-    print(url)
+    
+#    print(url)
     while 1:
         # print(globalAddress)
         #    url = "http://" + str(globalAddress)
         # print(url)
-        #   r = requests.get(ipNum, auth=HTTPBasicAuth("admin", "secret"))
-       # print("yes")
+        r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
+        data = r.text
+#        print(data)
+ 
+        soup = BeautifulSoup(r.text, 'html.parser')
+        listSoup = soup.find_all("h2")
+        colorTag = str(listSoup[1])
+        ledTag = str(listSoup[2])
+        dimTag = str(listSoup[3])
+        c = "<h2>Color : "
+        l = " </h2>"
+        x = "<h2>LED : "
+        y = "<h2>Dimness : "
+        color = colorTag[len(c):-len(l)]
+        status = ledTag[len(x):-len(l)]
+        intensity = dimTag[len(y):-len(l)]
+        print(color)
+        print(status)
+        print(intensity)
+      #  print(soup.prettify())
+#        pdb.set_trace()
+       # parsedData = parser.feed(data)
+       # print(parser.)
+       # print(r.text)
+        #status = r.text
+        # print("yes")
+        #print(status)
         break
 """Set led ports"""
 redPin = 11
@@ -78,7 +109,7 @@ bluePin = 15
 #pwmGreen = GPIO.PWM(13, 100)
 #pwmBlue = GPIO.PWM(15, 100)
 dc = 100
-pwm
+pwm = ''
 # dcRed = 100
 # dcGreen = 100
 # dcBlue = 100
