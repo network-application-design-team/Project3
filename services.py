@@ -181,20 +181,21 @@ def hello():
 @requires_auth
 def handle_led():
     if request.method == "GET":
-        #       pdb.set_trace()
+        #pdb.set_trace()
         #   print(request.args)
         if connected:
             argList = request.args
             status = argList.get("status")
             color = argList.get("color")
             dimness = int(argList.get("intensity"))
-            now = datetime.datetime.now()
-            templateData["time"] = timeString
             templateData["color"] = color
             templateData["dimness"] = str(dimness)
             templateData["led"] = status
 
+        now = datetime.datetime.now()
         timeString = now.strftime("%Y-%m-%d %H:%M")
+        templateData["time"] = timeString
+
         # templateData = {
         #   "title": "HELLO!",
         #  "time": timeString,
