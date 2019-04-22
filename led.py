@@ -11,7 +11,7 @@ import pdb
 import sys, time
 import RPi.GPIO as GPIO
 from bs4 import BeautifulSoup
-
+GPIO.setwarnings(False)
 def fetch_ip():
     return (
         (
@@ -55,6 +55,82 @@ status = ''
 color = ''
 brightness = ''
 
+redPin = 11
+greenPin = 13
+bluePin = 15
+
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(redPin, GPIO.OUT)
+GPIO.setup(greenPin, GPIO.OUT)
+GPIO.setup(bluePin, GPIO.OUT)
+
+pwmRed = GPIO.PWM(redPin, 100)
+pwmRed.start(0)
+pwmGreen = GPIO.PWM(greenPin, 100)
+pwmGreen.start(0)
+pwmBlue = GPIO.PWM(bluePin, 100)
+pwmBlue.start(0)
+
+
+
+def blink(pin, pwm, newdc):
+    pwm.ChangeDutyCycle(newdc)
+
+#def turnOff(pin, pwm, newdc):
+#    GPIO.setmode(GPIO.BOARD)
+#    GPIO.setup(pin, GPIO.OUT)
+#    GPIO.output(pin, GPIO.LOW)
+
+"""LED and PWM lightups"""
+
+def red(dc):
+    blink(redPin, pwmRed, dc)
+
+
+def green(dc):
+    blink(greenPin, pwmGreen, dc)
+
+
+def blue(dc):
+    blink(bluePin, pwmBlue, dc)
+
+
+def yellow(dc):
+    blink(redPin, pwmRed, dc)
+    blink(greenPin, pwmGreen, dc)
+
+
+def cyan(dc):
+    blink(greenPin, pwmGreen, dc)
+    blink(bluePin, pwmBlue, dc)
+
+
+def magenta(dc):
+    blink(redPin, pwmRed, dc)
+    blink(bluePin, pwmBlue, dc)
+
+
+def white(dc):
+    blink(redPin, pwmRed, dc)
+    blink(greenPin, pwmGreen, dc)
+    blink(bluePin, pwmBlue, dc)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     zeroconf = Zeroconf()
@@ -85,10 +161,66 @@ if __name__ == "__main__":
         y = "<h2>Dimness : "
         color = colorTag[len(c):-len(l)]
         status = ledTag[len(x):-len(l)]
-        intensity = dimTag[len(y):-len(l)]
-        print(color)
-        print(status)
-        print(intensity)
+        intensity = int(dimTag[len(y):-len(l)])
+        if status == 'on':
+            if color == 'red':
+                dc = intensity
+                red(dc)
+            elif color == 'green':
+                dc = intensity
+                green(dc)
+            elif color == 'blue':
+                dc = intensity
+                blue(dc)
+            elif color == 'yellow':
+                dc = intensity
+                yellow(dc)
+            elif color == 'cyan':
+                dc = intensity
+                cyan(dc)
+            elif color == 'magenta':
+                dc = intensity
+                magenta(dc)
+            elif color == 'white':
+                dc = intensity
+                white(dc)
+            else:
+                print('ERROR: Unknown Color Request')
+        elif status == 'off':
+            if color == 'red':
+                dc = 0
+                red(dc)
+            elif color == 'green':
+                dc = 0
+                green(dc)
+            elif color == 'blue':
+                dc = 0
+                blue(dc)
+            elif color == 'yellow':
+                dc = 0
+                yellow(dc)
+            elif color == 'cyan':
+                dc = 0
+                cyan(dc)
+            elif color == 'magenta':
+                dc = 0
+                magenta(dc)
+            elif color == 'white':
+                dc = 0
+                white(dc)
+            else:
+                print('ERROR: Unknown Color Request')
+        else:
+            print('ERROR: Unknown Status Request')
+
+
+
+
+
+
+
+
+
       #  print(soup.prettify())
 #        pdb.set_trace()
        # parsedData = parser.feed(data)
@@ -97,7 +229,7 @@ if __name__ == "__main__":
         #status = r.text
         # print("yes")
         #print(status)
-        break
+        
 """Set led ports"""
 redPin = 11
 greenPin = 13
@@ -115,17 +247,6 @@ pwm = ''
 # dcGreen = 100
 # dcBlue = 100
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(redPin, GPIO.OUT)
-GPIO.setup(greenPin, GPIO.OUT)
-GPIO.setup(bluePin, GPIO.OUT)
-
-pwmRed = GPIO.PWM(redPin, 100)
-pwmRed.start(0)
-pwmGreen = GPIO.PWM(greenPin, 100)
-pwmGreen.start(0)
-pwmBlue = GPIO.PWM(bluePin, 100)
-pwmBlue.start(0)
 
 
 """turn off warnings"""
