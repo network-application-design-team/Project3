@@ -65,7 +65,9 @@ def canvasRun(can_file):
 class MyListener(object):
     # def remove_service(self, zeroconf, type, name):
     #  print("Service %s removed" % (name,))
-
+    
+    def __init__(self):
+        self.connected = False
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
         # print name, info.get_name(), info.server,
@@ -74,6 +76,7 @@ class MyListener(object):
         if info.name == "team20_led._http._tcp.local.":
             global ledAddress
             #            print("yes")
+            self.connected = True
             ledAddress = socket.inet_ntoa(info.address)
 
 
@@ -261,10 +264,10 @@ if __name__ == "__main__":
 
             listener = MyListener()
             browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
-            connected = True
         except:
-            connected = False
+            connected = listener.connected
         time.sleep(1)
+        connected = listener.connected
         user1 = {"user": "Kishan", "Pass": "Something", "Delete": "True"}
         user2 = {"user": "Buse", "Pass": "Honaker", "Delete": "True"}
         user3 = {"user": "Ethan", "Pass": "Password", "Delete": "True"}
