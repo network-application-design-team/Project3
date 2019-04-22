@@ -28,15 +28,14 @@ parent_dir = os.getcwd() + "/"
 web = "https://vt.instructure.com/api/v1/courses/"
 ckey = servicesKeys.ckey
 course = "83639"
-can_file = "Assignment3.pdf"
 
 
-def canvasRun():
+def canvasRun(can_file):
     """function to download file from canvas"""
     payload = {"access_token": ckey, "search_term": can_file}
     r = requests.get(web + course + "/files", params=payload)
     # url = web+course+'/files?search_term='+can_file+'&access_token='+ckey
-
+    
     try:
         """Fetch the course details"""
         can_file = ul.request.urlopen(r.url).read()
@@ -218,7 +217,7 @@ def handle_canvas():
     if request.method == "GET":
         argList = request.args
         can_file = argList.get("file")
-        canvasRun()
+        canvasRun(can_file)
         return render_template("main.html", **templateData)
 
 
