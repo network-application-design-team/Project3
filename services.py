@@ -138,6 +138,7 @@ def requires_auth(f):
 # status = "on"
 
 
+connected = False
 templateData = {
     "title": "HELLO!",
     "time": "",
@@ -182,17 +183,18 @@ def handle_led():
     if request.method == "GET":
         #       pdb.set_trace()
         #   print(request.args)
-        argList = request.args
-        status = argList.get("status")
-        color = argList.get("color")
-        dimness = int(argList.get("intensity"))
-        now = datetime.datetime.now()
-        timeString = now.strftime("%Y-%m-%d %H:%M")
-        templateData["time"] = timeString
-        templateData["color"] = color
-        templateData["dimness"] = str(dimness)
-        templateData["led"] = status
+        if connected:
+            argList = request.args
+            status = argList.get("status")
+            color = argList.get("color")
+            dimness = int(argList.get("intensity"))
+            now = datetime.datetime.now()
+            templateData["time"] = timeString
+            templateData["color"] = color
+            templateData["dimness"] = str(dimness)
+            templateData["led"] = status
 
+        timeString = now.strftime("%Y-%m-%d %H:%M")
         # templateData = {
         #   "title": "HELLO!",
         #  "time": timeString,
@@ -248,16 +250,20 @@ def fetch_ip():
 if __name__ == "__main__":
     try:
         #   app.run(host='0.0.0.0', port=80, debug=True)
-        ledColors = {"red", "blue", "green", "magenta", "cyan", "yellow", "white"}
-        ipAddr = fetch_ip()
+        try:
+            ledColors = {"red", "blue", "green", "magenta", "cyan", "yellow", "white"}
+            ipAddr = fetch_ip()
 
-        zeroconf = Zeroconf()
-        #  service = ServiceInfo("_http._tcp.local.", "service20._http._tcp.local.",
-        # socket.inet_aton(fetch_ip()), 5000, 0, 0, ledColors, "service20.local.")
-        #   zeroconf.register_service(service)
+            zeroconf = Zeroconf()
+            #  service = ServiceInfo("_http._tcp.local.", "service20._http._tcp.local.",
+            # socket.inet_aton(fetch_ip()), 5000, 0, 0, ledColors, "service20.local.")
+            #   zeroconf.register_service(service)
 
-        listener = MyListener()
-        browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
+            listener = MyListener()
+            browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
+            connected = True
+        except:
+            connected = False
         time.sleep(1)
         user1 = {"user": "Kishan", "Pass": "Something", "Delete": "True"}
         user2 = {"user": "Buse", "Pass": "Honaker", "Delete": "True"}
@@ -274,6 +280,7 @@ if __name__ == "__main__":
             print()
         except:
             zeroconf.close()
+            connected = False
     except KeyboardInterrupt:
         zeroconf.close()
         col.delete_many({"Delete": "True"})
