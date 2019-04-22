@@ -152,7 +152,7 @@ if __name__ == "__main__":
         #    url = "http://" + str(globalAddress)
         # print(url)
         time.sleep(10)
-        r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
+        r = requests.get(url, auth=HTTPBasicAuth("Buse", "Honaker"))
             
         data = r.text
 #        print(data)
