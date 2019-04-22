@@ -151,11 +151,9 @@ if __name__ == "__main__":
         # print(globalAddress)
         #    url = "http://" + str(globalAddress)
         # print(url)
-        if oldColor != color or oldLed != status or oldDim != intensity:
-            r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
-            oldColor = color
-            oldLed = status
-            oldDim = intensity
+        time.sleep(10)
+        r = requests.get(url, auth=HTTPBasicAuth("admin", "secret"))
+            
         data = r.text
 #        print(data)
  
