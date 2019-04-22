@@ -94,10 +94,11 @@ def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
-    userList = col.find_one({"user": username})
-    passList = col.find_one({"Pass": password})
-    # return username == "admin" and password == "secret"
-    return userList != None and passList != None
+    
+#    userList = col.find_one({"user": username})
+#    passList = col.find_one({"Pass": password})
+    return username == "admin" and password == "secret"
+  #  return userList != None and passList != None
 
 
 def authenticate():
@@ -111,6 +112,7 @@ def authenticate():
 
 
 def requires_auth(f):
+    ''' 
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
@@ -119,7 +121,14 @@ def requires_auth(f):
         return f(*args, **kwargs)
 
     return decorated
-
+    '''
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
 
 # color = "Red"
 # dimness = 50
@@ -206,7 +215,7 @@ def handle_canvas():
         canvasRun()
         return render_template("main.html", **templateData)
 
-
+'''  
 """Pymongo"""
 client = pymongo.MongoClient(
     host="localhost",
@@ -218,7 +227,7 @@ client = pymongo.MongoClient(
 )
 db = client.ECE4564_Assignment_3
 col = db.service_auth
-
+''' 
 
 def fetch_ip():
     return (
@@ -269,4 +278,4 @@ if __name__ == "__main__":
         print()
     finally:
         zeroconf.close()
-        col.delete_many({"Delete": "True"})
+       # col.delete_many({"Delete": "True"})
